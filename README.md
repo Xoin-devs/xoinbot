@@ -104,6 +104,26 @@ On the **General Information** tab, there will be an **Interactions Endpoint URL
 
 Click **Save Changes**, and your app should be ready to run 🚀
 
+## Docker
+
+Build and start bot:
+
+```shell
+docker compose up --build -d
+```
+
+Run without build:
+
+```shell
+docker compose up -d
+```
+
+Stop bot:
+
+```shell
+docker compose down
+```
+
 ## Other resources
 - Read **[the documentation](https://discord.com/developers/docs/intro)** for in-depth information about API features.
 - Browse the `examples/` folder in this project for smaller, feature-specific code examples
