@@ -17,6 +17,7 @@ services:
       DISCORD_TOKEN: $DISCORD_TOKEN
       APP_ID: $APP_ID
       PUBLIC_KEY: $PUBLIC_KEY
+      SERVER_ID: $SERVER_ID
     ports:
       - 3000:3000
 
