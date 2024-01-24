@@ -1,0 +1,2 @@
+# xoinbot
+The Xoin Bot
