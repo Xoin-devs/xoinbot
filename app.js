@@ -7,7 +7,8 @@ import {
   MessageComponentTypes,
   ButtonStyleTypes,
 } from 'discord-interactions';
-import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
+import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils/discordUtils.js';
+import {searchTenor} from './utils/tenorUtils.js';
 
 // Create an express app
 const app = express();
@@ -25,7 +26,6 @@ const activeGames = {};
 app.post('/interactions', async function (req, res) {
   // Interaction type and data
   const { type, id, data } = req.body;
-  console.log(res);
 
   /**
    * Handle verification requests
@@ -40,13 +40,19 @@ app.post('/interactions', async function (req, res) {
    */
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
+    console.log(`Got command ${name}`);
 
     // "marmotte" command; answering with a gif 
     if (name === 'marmotte') {
+      const tenorParameters = {
+        queryString: 'marmotte',
+      };
+      const gif = await searchTenor(tenorParameters);
+      console.log(gif);
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'https://tenor.com/view/marmotte-gif-20316053',
+          content: 'https://media1.tenor.com/m/nkBPl3Hgka8AAAAd/chewing.gif',
         },
       });
     }

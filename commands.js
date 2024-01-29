@@ -1,5 +1,5 @@
 import "dotenv/config.js";
-import { capitalize, InstallGlobalCommands } from './utils.js';
+import { capitalize, InstallGlobalCommands } from './utils/discordUtils.js';
 
 // Simple test command
 const HELLO_COMMAND = {
@@ -10,7 +10,7 @@ const HELLO_COMMAND = {
 
 const MARMOTTE_COMMAND = {
   name: 'marmotte',
-  description: 'Marmotte\'s time',
+  description: 'Marmotte time',
   type: 1,
 };
 
