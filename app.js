@@ -1,14 +1,18 @@
-import 'dotenv/config';
-import express from 'express';
+import "dotenv/config";
+import express from "express";
 import {
   InteractionType,
   InteractionResponseType,
   InteractionResponseFlags,
   MessageComponentTypes,
   ButtonStyleTypes,
-} from 'discord-interactions';
-import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils/discordUtils.js';
-import {searchTenor} from './utils/tenorUtils.js';
+} from "discord-interactions";
+import {
+  VerifyDiscordRequest,
+  getRandomEmoji,
+  DiscordRequest,
+} from "./utils/discordUtils.js";
+import { searchTenor } from "./utils/tenorUtils.js";
 
 // Create an express app
 const app = express();
@@ -23,7 +27,7 @@ const activeGames = {};
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
-app.post('/interactions', async function (req, res) {
+app.post("/interactions", async function (req, res) {
   // Interaction type and data
   const { type, id, data } = req.body;
 
@@ -42,39 +46,41 @@ app.post('/interactions', async function (req, res) {
     const { name } = data;
     console.log(`Got command ${name}`);
 
-    // "marmotte" command; answering with a gif 
-    if (name === 'marmotte') {
+    // "marmotte" command; answering with a gif
+    if (name === "marmotte") {
       const tenorParameters = {
-        queryString: 'marmotte',
+        q: "groundhog",
+        key: "AIzaSyBmc5AYIgk90h09OJQzOmc_d9lLbT8rU78",
+        random: "true",
+        limit: 20,
       };
       const gif = await searchTenor(tenorParameters);
-      console.log(gif);
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'https://media1.tenor.com/m/nkBPl3Hgka8AAAAd/chewing.gif',
+          content: gif,
         },
       });
     }
 
     // "hello" command
-    if (name === 'hello') {
+    if (name === "hello") {
       // Send a message into the channel where command was triggered from
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           // Fetches a random emoji to send from a helper function
-          content: 'hello world ' + getRandomEmoji(),
+          content: "hello world " + getRandomEmoji(),
         },
       });
     }
 
     // "who" command
-    if (name === 'who') {
+    if (name === "who") {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'I am a bot',
+          content: "I am a bot",
         },
       });
     }
@@ -82,5 +88,5 @@ app.post('/interactions', async function (req, res) {
 });
 
 app.listen(PORT, () => {
-  console.log('Listening on port', PORT);
+  console.log("Listening on port", PORT);
 });
