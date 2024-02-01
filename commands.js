@@ -14,6 +14,12 @@ const MARMOTTE_COMMAND = {
   type: 1,
 };
 
+const DRIFT_COMMAND = {
+  name: 'drift',
+  description: 'Quand tu pars en couscous merguez',
+  type: 1,
+};
+
 const WHO_COMMAND = {
   name: 'who',
   description: 'Who am I?',
@@ -35,6 +41,6 @@ const CHALLENGE_COMMAND = {
   type: 1,
 };
 
-const ALL_COMMANDS = [MARMOTTE_COMMAND, HELLO_COMMAND, CHALLENGE_COMMAND, WHO_COMMAND];
+const ALL_COMMANDS = [MARMOTTE_COMMAND, HELLO_COMMAND, CHALLENGE_COMMAND, WHO_COMMAND, DRIFT_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

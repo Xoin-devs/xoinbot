@@ -63,6 +63,23 @@ app.post("/interactions", async function (req, res) {
       });
     }
 
+    // "drift" command: answering with a gif
+    if (name === "drift"){
+      const tenorParameters = {
+        q: "drift",
+        key: "AIzaSyBmc5AYIgk90h09OJQzOmc_d9lLbT8rU78",
+        random: "true",
+        limit: 20,
+      }
+      const gif = await searchTenor(tenorParameters);
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: gif,
+        },
+      });
+    }
+
     // "hello" command
     if (name === "hello") {
       // Send a message into the channel where command was triggered from
