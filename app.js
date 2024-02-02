@@ -50,7 +50,7 @@ app.post("/interactions", async function (req, res) {
     if (name === "marmotte") {
       const tenorParameters = {
         q: "groundhog",
-        key: "AIzaSyBmc5AYIgk90h09OJQzOmc_d9lLbT8rU78",
+        key: process.env.TENOR_KEY,
         random: "true",
         limit: 20,
       };
@@ -67,7 +67,7 @@ app.post("/interactions", async function (req, res) {
     if (name === "drift") {
       const tenorParameters = {
         q: "drift",
-        key: "AIzaSyBmc5AYIgk90h09OJQzOmc_d9lLbT8rU78",
+        key: process.env.TENOR_KEY,
         random: "true",
         limit: 20,
       };
