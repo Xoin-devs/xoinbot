@@ -3,7 +3,8 @@
 ## Start XoinBot locally
 
 Create a .env file at the root folder, containing the following values:
-```
+
+```config
 DISCORD_TOKEN=TO_BE_DEFINED
 APP_ID=TO_BE_DEFINED
 PUBLIC_KEY=TO_BE_DEFINED
@@ -19,6 +20,7 @@ Run the commands deployment script to update Discord about the used commands
 ```javascript
 node utils/deploy-commands.js
 ```
+
 *If the command isn't sent at the root of the project, it will not work, due to dotenv errors.*
 
 Run the bot locally
