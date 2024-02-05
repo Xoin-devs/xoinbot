@@ -1,9 +1,10 @@
 const { Client, GatewayIntentBits, Events, Collection } = require("discord.js");
 const dotenv = require("dotenv");
 dotenv.config();
-const fs = require('node:fs');
-const path = require('node:path');
+const fs = require("node:fs");
+const path = require("node:path");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
+const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
@@ -14,15 +15,31 @@ const guildId = process.env.GUILD_ID;
 const voiceChannelId = process.env.SNEK_VOICECHAT_CHANNEL;
 const textChannelId = process.env.SNEK_ANNOUNCEMENT_CHANNEL;
 
-client.once(Events.ClientReady, readyClient => {
-	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+client.once(Events.ClientReady, (readyClient) => {
+  console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
+
+async function getMembersCount(channel) {
+  if (channel === null) return 0;
+  const fetchedChannel = await channel.fetch(true);
+  return fetchedChannel.members.size;
+}
 
 client.commands = new Collection();
 loadCommandsAtStart(client);
 
-client.on("voiceStateUpdate", (oldState, newState) => {
+client.on("voiceStateUpdate", async (oldState, newState) => {
   const { member, channel } = newState;
+  
+  const oldMembersCount = await getMembersCount(oldState.channel);
+  const newMembersCount = await getMembersCount(newState.channel);
+
+  if (!isStateChangeLegitimate(oldState, newState)) {
+    return;
+  }
+  if (oldMembersCount >= newMembersCount || newMembersCount > 0) {
+    return;
+  }
 
   if (channel && channel.id === voiceChannelId) {
     const userName = member.user.username;
