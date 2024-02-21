@@ -6,6 +6,8 @@ const path = require("node:path");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
 
+const today = new Date();
+
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
 });
@@ -35,9 +37,11 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
   const newMembersCount = await getMembersCount(newState.channel);
 
   if (!isStateChangeLegitimate(oldState, newState)) {
+    console.log(`${today} - State change is not legitimate.`);
     return;
   }
-  if (oldMembersCount >= newMembersCount || newMembersCount > 0) {
+  if (newMembersCount > 1) {
+    console.log(`${today} - No need to announce : ${newMembersCount} members in the channel.`);
     return;
   }
 
@@ -45,6 +49,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     const userName = member.user.username;
     const textChannel = client.channels.cache.get(textChannelId);
 
+    console.log(`${today} - ${userName} is at the Xoin!`);
     textChannel.send(`${userName} est au Xoin!`);
   }
 });
