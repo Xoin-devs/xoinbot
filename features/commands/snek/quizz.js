@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, ButtonBuilder } = require("discord.js");
 const { ActionRowBuilder, MessageButton, MessageEmbed } = require("discord.js");
 
-const { searchTenor } = require("../../../utils/tenor-utils");
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("quizz")
