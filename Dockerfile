@@ -4,9 +4,8 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-ARG NODE_VERSION=18.18.0
 
-FROM node:${NODE_VERSION}-alpine
+FROM node:lts-alpine3.19
 
 # Use production node environment by default.
 ENV NODE_ENV production
