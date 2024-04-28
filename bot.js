@@ -41,10 +41,12 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     const newMembersCount = await getMembersCount(newState.channel);
 
     if (!isStateChangeLegitimate(oldState, newState)) {
+        today = new Date();
         console.log(`${today} - State change is not legitimate.`);
         return;
     }
     if (newMembersCount > 1) {
+        today = new Date();
         console.log(
             `${today} - No need to announce : ${newMembersCount} members in the channel.`
         );
@@ -52,6 +54,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     }
 
     if (channel && channel.id === voiceChannelId) {
+        today = new Date();
         const userName = member.user.username;
         const textChannel = client.channels.cache.get(textChannelId);
 
