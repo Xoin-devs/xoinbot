@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 
-const { searchTenor } = require('../../utils/tenor-utils');
+const { searchTenor } = require('../../../utils/tenor-utils');
 
 module.exports = {
   data: new SlashCommandBuilder()
