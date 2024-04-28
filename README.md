@@ -31,6 +31,32 @@ node bot.js
 
 ## Docker
 
+### Deploy on prod
+
+Build the docker image and export is as a tar :
+
+```shell
+deploy-on-prod.sh
+```
+
+The tar is located in `tmp/`. You can push it on the prod server using :
+
+```shell
+scp tmp/xoinbot.tar <USER>@<IP>:xoinbot
+```
+
+Then open an ssh connection on the server hosting the bot and go into `~/xoinbot`:
+You should have the last version of `xoinbot.tar`
+Finally run :
+
+```shell
+./docker-run.sh
+```
+
+And you have the last version of the Xoinbot runnig.
+
+### Local run
+
 Build and start bot:
 
 ```shell
