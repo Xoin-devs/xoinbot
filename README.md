@@ -33,10 +33,10 @@ node bot.js
 
 ### Deploy on prod
 
-Build the docker image and export is as a tar :
+Build the docker image and export it as a tar :
 
 ```shell
-deploy-on-prod.sh
+./deploy-on-prod.sh
 ```
 
 The tar is located in `tmp/`. You can push it on the prod server using :
