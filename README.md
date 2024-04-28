@@ -33,6 +33,8 @@ node bot.js
 
 ### Deploy on prod
 
+Be sure Docker is running on the local environment.
+
 Build the docker image and export it as a tar :
 
 ```shell
