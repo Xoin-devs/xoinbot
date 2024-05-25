@@ -6,7 +6,7 @@ dotenv.config({path: '../../.env'});
 const searchTenor = async (search) => {
   try {
     const response = await axios.get("https://tenor.googleapis.com/v2/search", {
-      params: { limit: 1, key: process.env.TENOR_KEY, q: search, random: true },
+      params: { limit: 1, key: process.env.TENOR_KEY, q: search, random: true, country: "FR", locale: "fr_FR" },
     });
     return response.data.results[0].url;
   } catch (error) {
