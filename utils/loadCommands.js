@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = function loadCommandsAtStart(client) {
-    const foldersPath = path.join(__dirname, "../features/commands");
+    const foldersPath = path.join(__dirname, "../commands");
     const commandFolders = fs.readdirSync(foldersPath);
 
     for (const folder of commandFolders) {

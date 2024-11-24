@@ -38,13 +38,13 @@ Be sure Docker is running on the local environment.
 Build the docker image and export it as a tar :
 
 ```shell
-./deploy-on-prod.sh
+./deploy-on-prod.sh -n <image_name> -t <image_tag>
 ```
 
 The tar is located in `tmp/`. You can push it on the prod server using :
 
 ```shell
-scp tmp/xoinbot.tar <USER>@<IP>:xoinbot
+scp tmp/xoinbot.tar <USER>@<IP>:<destination_path>
 ```
 
 Then open an ssh connection on the server hosting the bot and go into `~/xoinbot`:
