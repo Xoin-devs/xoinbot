@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node app.js",
     "register": "node commands.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon bot.js"
   },
   "author": "Shay DeWael",
   "license": "MIT",
@@ -23,6 +23,6 @@
     "node-fetch": "^3.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.22"
   }
 }

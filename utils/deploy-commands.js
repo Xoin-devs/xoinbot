@@ -1,4 +1,4 @@
-const dotenv = require("dotenv").config({ path: "../.env" });
+const dotenv = require("dotenv").config({ path: ".env" });
 const { REST, Routes } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");

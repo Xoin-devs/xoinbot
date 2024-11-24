@@ -65,20 +65,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 
 // generic handling of text commands
 client.on(Events.InteractionCreate, async (interaction) => {
-    if (interaction.isButton()) {
-        if (interaction.customId === "yes") {
-            await interaction.update({
-                content: "C'est une micro-agression, je suis bicurieux",
-                components: [],
-            });
-        } else if (interaction.customId === "no") {
-            await interaction.update({
-                content: "Non c'est pas raciste, c'est de l'humour",
-                components: [],
-            });
-        }
-        return;
-    } else if (!interaction.isChatInputCommand()) return;
+    if (!interaction.isChatInputCommand()) return;
 
     const command = interaction.client.commands.get(interaction.commandName);
 
