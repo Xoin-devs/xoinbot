@@ -12,7 +12,8 @@ const stateProperties = [
 
 module.exports = function isStateChangeLegitimate(oldState, newState) {
     for (const prop of stateProperties) {
-        if (oldState[prop] !== newState[prop]) {
+        if (oldState[prop] !== null && oldState[prop] !== newState[prop]) {
+            console.log("prop: " + prop + " : " + oldState[prop] + " different than " + newState[prop]);
             return false;
         }
     }
