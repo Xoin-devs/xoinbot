@@ -5,8 +5,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
-const { announcementChannelId, vocalChannelId, guildId } = require('./services/state');
-const { refreshChannelsByGuild } = require('./modules/database');
+let { announcementChannelId, vocalChannelId, guildId } = require('./services/state');
+const { getChannelsByGuild } = require('./modules/database');
 
 let today = new Date();
 
@@ -15,12 +15,7 @@ const client = new Client({
 });
 
 let token = process.env.TEST_DISCORD_TOKEN;
-if (!process.env.IN_TEST_ENVIRONMENT) {
-    console.log("Starting in production mode");
-    token = process.env.DISCORD_TOKEN;
-    vocalChannelId = process.env.SNEK_VOICECHAT_CHANNEL;
-    announcementChannelId = process.env.SNEK_ANNOUNCEMENT_CHANNEL;
-}
+
 client.once(Events.ClientReady, (readyClient) => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
@@ -36,9 +31,8 @@ loadCommandsAtStart(client);
 
 client.on("voiceStateUpdate", async (oldState, newState) => {
     const { member, channel } = newState;
-    refreshChannelsByGuild(channel.guild.id);
 
-    const oldMembersCount = await getMembersCount(oldState.channel);
+    //const oldMembersCount = await getMembersCount(oldState.channel);
     const newMembersCount = await getMembersCount(newState.channel);
 
     if (!isStateChangeLegitimate(oldState, newState)) {
@@ -55,14 +49,18 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     }
 
     // check on channel to avoid error when ppl disconnect
-    console.log("channel && channel.id === vocalChannelId", channel && channel.id === vocalChannelId, channel.id, vocalChannelId);
-    if (channel && channel.id === vocalChannelId) {
-        today = new Date();
-        const userName = member.user.username;
-        const textChannel = client.channels.cache.get(announcementChannelId);
+    if (channel) {
+        let result = await getChannelsByGuild(channel.guild.id);
+        announcementChannelId = result["announcementId"];
+        vocalChannelId = result["vocalChannelId"];
+        if (channel && channel.id === vocalChannelId) {
+            today = new Date();
+            const userName = member.user.username;
+            const textChannel = client.channels.cache.get(announcementChannelId);
 
-        console.log(`${today} - ${userName} is at the Xoin!`);
-        textChannel.send(`${userName} est au Xoin!`);
+            console.log(`${today} - ${userName} is at the Xoin!`);
+            textChannel.send(`${userName} est au Xoin!`);
+        }
     }
 });
 

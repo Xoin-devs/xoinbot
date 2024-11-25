@@ -51,17 +51,15 @@ const addNewGuild = (guildId, announcementId, vocalId) => {
     });
 };
 
-const refreshChannelsByGuild = async (guildId) => {
-    db.get(`SELECT announcementId, vocalId FROM guilds WHERE guildId = ?`, [guildId], (err, row) => {
-        if (err) {
-            console.error(err.message);
-            return;
-        }
-        console.log("row - ", row);
-        if (row) {
-                announcementId = row["announcementId"];
-                vocalChannelId = row["vocalId"];
-        }
+const getChannelsByGuild = async (guildId) => {
+    return new Promise((resolve, reject) => {
+        return db.get(`SELECT announcementId, vocalId FROM guilds WHERE guildId = ?`, [guildId], (err, row) => {
+            if (err) {
+                console.error(err.message);
+                return reject(err.message);
+            }
+            return resolve({announcementId: row["announcementId"], vocalChannelId: row["vocalId"]});
+        })
     })
 }
 
@@ -72,4 +70,4 @@ db.run(
     }
 );
 
-module.exports = { db, addNewGuild, refreshChannelsByGuild };
+module.exports = { db, addNewGuild, getChannelsByGuild };
