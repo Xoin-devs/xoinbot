@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
-let { announcementChannelId, vocalChannelId, guildId } = require('./services/state');
+let { announcementChannelId, vocalChannelId } = require('./services/state');
 const { getChannelsByGuild } = require('./modules/database');
 
 let today = new Date();
@@ -31,8 +31,6 @@ loadCommandsAtStart(client);
 
 client.on("voiceStateUpdate", async (oldState, newState) => {
     const { member, channel } = newState;
-
-    //const oldMembersCount = await getMembersCount(oldState.channel);
     const newMembersCount = await getMembersCount(newState.channel);
 
     if (!isStateChangeLegitimate(oldState, newState)) {
