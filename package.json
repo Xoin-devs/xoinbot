@@ -1,7 +1,7 @@
 {
-  "name": "getting-started",
+  "name": "channel-chime",
   "version": "1.0.0",
-  "description": "Discord example app",
+  "description": "Channel Chime for your Discord server",
   "main": "app.js",
   "type": "commonjs",
   "engines": {
@@ -12,7 +12,7 @@
     "register": "node commands.js",
     "dev": "nodemon bot.js"
   },
-  "author": "Shay DeWael",
+  "author": "Khwaja",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.7",
