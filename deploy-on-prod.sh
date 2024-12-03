@@ -1,16 +1,35 @@
 #!/bin/bash
 
-if [ -n "$1" ]; then
-	IMAGE_NAME=$1
-else
-	IMAGE_NAME="xoinbot"
-fi
-if [ -n "$2" ]; then
-	IMAGE_TAG=$2
-else
-	IMAGE_TAG="1.0"
+function usage {
+	echo "Usage: $0 -n [image_name] -t [image_tag]"
+	echo "  -n | --name image_name: the name of the image to build"
+	echo "  -t | --tag image_tag: the tag of the image to build"
+	echo "  -h | --help: display this help"
+}
+
+while [ "$1" != "" ]; do
+	case $1 in
+		-n | --name )           shift
+								IMAGE_NAME=$1
+								;;
+		-t | --tag )            shift
+								IMAGE_TAG=$1
+								;;
+		-h | --help )           usage
+								exit
+								;;
+		* )                     usage
+								exit 1
+	esac
+	shift
+done
+
+if [ -z "$IMAGE_NAME" ] || [ -z "$IMAGE_TAG" ]; then
+	usage
+	exit 1
 fi
 
+npm install --production
 
 docker build --platform "linux/amd64"  -t "$IMAGE_NAME:$IMAGE_TAG" .
 
