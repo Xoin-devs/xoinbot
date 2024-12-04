@@ -1,29 +1,32 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, ChannelType } = require("discord.js");
 const { addNewGuild } = require('../../modules/database');
 let { announcementChannelId, guildId, vocalChannelId } = require('../../services/state');
 
 // TODO : 
 // Add labels for notifications (notifications_strings)
-// Add SQLite database
+// Filter on allowed channels (depending on bot's roles)
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("setup")
     .setDescription(`Setup the ChannelChime bot`)
-    .addStringOption(option =>
+    .addChannelOption(option =>
       option.setName("vocal_channel_id")
         .setDescription("The ID of the vocal channel to watch 🪶")
+        .addChannelTypes(ChannelType.GuildVoice)
         .setRequired(true)
     )
-    .addStringOption(option =>
+    .addChannelOption(option =>
       option.setName("announcement_channel_id")
         .setDescription("The ID of the channel where ChannelChime 🪶 will alert")
+        .addChannelTypes(ChannelType.GuildText)
         .setRequired(true)
     )
   ,
   async execute(interaction) {
-    addNewGuild(interaction.guildId, interaction.options.getString('announcement_channel_id'), interaction.options.getString('vocal_channel_id'));
-    announcementChannelId = interaction.options.getString('announcement_channel_id');
-    vocalChannelId = interaction.options.getString('vocal_channel_id');
+    announcementChannelId = interaction.options.getChannel('announcement_channel_id').id;
+    vocalChannelId = interaction.options.getChannel('vocal_channel_id').id;
+    addNewGuild(interaction.guildId, announcementChannelId, vocalChannelId);
     guildId = interaction.guildId;
     await interaction.reply({ content: 'Your ChannelChime 🪶 is now set up!', ephemeral: true });
   },
