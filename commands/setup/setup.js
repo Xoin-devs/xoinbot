@@ -5,8 +5,9 @@ let { announcementChannelId, guildId, vocalChannelId } = require('../../services
 // TODO : 
 // Add labels for notifications (notifications_strings)
 // Filter on allowed channels (depending on bot's roles)
-// If announcement channel got deleted, the bot crash
+// If announcement channel got deleted, the bot crash ==> oops, thanks to resetup
 // Announce the username, not the ID
+// Command to show the setup
 
 module.exports = {
   data: new SlashCommandBuilder()
