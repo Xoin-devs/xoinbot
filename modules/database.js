@@ -4,7 +4,7 @@ let { announcementId, vocalChannelId } = require('../services/state');
 // Initialisation de la base de données
 const db = new sqlite3.Database('./data.db', (err) => {
     if (err) console.error(err.message);
-    else console.log('Connecté à la base SQLite.');
+    else console.log('Connected to SQLite');
 });
 
 const updateGuildRow = (guildId, announcementId, vocalId) => {
@@ -29,7 +29,7 @@ const insertGuildRow = (guildId, announcementId, vocalId) => {
             if (err) {
                 console.error(err.message);
             } else {
-                console.log(`Guild ID ${guildId} ajouté avec succès.`);
+                console.log(`Guild ID ${guildId} successfully added.`);
             }
         }
     );

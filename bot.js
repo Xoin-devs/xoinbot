@@ -12,7 +12,7 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
 });
 
-let token = process.env.TEST_DISCORD_TOKEN;
+let token = process.env.DISCORD_TOKEN;
 
 client.once(Events.ClientReady, (readyClient) => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);

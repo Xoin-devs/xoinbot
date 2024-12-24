@@ -25,8 +25,8 @@ module.exports = async (client, oldState, newState) => {
         if (channel.id === vocalChannelId) {
             const userName = member.user.username;
             const textChannel = client.channels.cache.get(announcementChannelId);
-            console.log(`${new Date()} - ${userName} is at the Xoin!`);
-            textChannel.send(`${userName} est au Xoin!`);
+            console.log(`${new Date()} - ${userName} has joined the voice channel`);
+            textChannel.send(`🪶 ${userName} has joined the voice channel.`);
         }
     }
 };
