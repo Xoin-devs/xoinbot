@@ -1,4 +1,3 @@
-
 let announcementChannelId;
 let vocalChannelId;
 let guildId;
