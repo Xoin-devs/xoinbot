@@ -5,6 +5,14 @@ const isStateChangeLegitimate = require('@utils/isStateChangeLegitimate');
 module.exports = async (client, oldState, newState) => {
     const { member, channel } = newState;
     const newMembersCount = await getMembersCount(newState.channel);
+    const timeOptions = {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    };
 
     if (!isStateChangeLegitimate(oldState, newState)) {
         console.log(`${new Date()} - State change is not legitimate.`);
@@ -25,7 +33,7 @@ module.exports = async (client, oldState, newState) => {
         if (channel.id === vocalChannelId) {
             const userName = member.user.username;
             const textChannel = client.channels.cache.get(announcementChannelId);
-            console.log(`${new Date()} - ${userName} has joined the voice channel`);
+            console.log(`${new Date().toLocaleDateString(undefined, timeOptions)} - ${userName} has joined the voice channel`);
             textChannel.send(`🪶 ${userName} has joined the voice channel.`);
         }
     }
