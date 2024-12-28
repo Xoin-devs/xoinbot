@@ -1,10 +1,12 @@
 const sqlite3 = require('sqlite3').verbose();
 let { announcementId, vocalChannelId } = require('../services/state');
+require('module-alias/register');
+const logger = require('@utils/logger');
 
 // Initialisation de la base de données
 const db = new sqlite3.Database('./data.db', (err) => {
     if (err) console.error(err.message);
-    else console.log('Connected to SQLite');
+    else logger('Connected to SQLite');
 });
 
 const updateGuildRow = (guildId, announcementId, vocalId) => {
@@ -15,7 +17,7 @@ const updateGuildRow = (guildId, announcementId, vocalId) => {
             if (err) {
                 console.error(err.message);
             } else {
-                console.log(`Guild ID ${guildId} mis à jour avec announcementId=${announcementId} et vocalId=${vocalId}.`);
+                logger(`Guild ID ${guildId} updated with announcementId=${announcementId} and vocalId=${vocalId}.`);
             }
         }
     );
@@ -29,7 +31,7 @@ const insertGuildRow = (guildId, announcementId, vocalId) => {
             if (err) {
                 console.error(err.message);
             } else {
-                console.log(`Guild ID ${guildId} successfully added.`);
+                logger(`Guild ID ${guildId} successfully added.`);
             }
         }
     );

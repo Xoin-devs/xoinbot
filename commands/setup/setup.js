@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ChannelType } = require("discord.js");
-const { addNewGuild } = require('../../modules/database');
-let { announcementChannelId, guildId, vocalChannelId } = require('../../services/state');
+const { addNewGuild } = require('@modules/database');
+let { announcementChannelId, guildId, vocalChannelId } = require('@services/state');
 
 // TODO : 
 // Add labels for notifications (notifications_strings)

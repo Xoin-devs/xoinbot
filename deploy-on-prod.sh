@@ -41,7 +41,7 @@ mkdir tmp
 
 echo "${IMAGE_NAME}:${IMAGE_TAG}"
 
-docker save -o ./tmp/xoinbot.tar "${IMAGE_NAME}:${IMAGE_TAG}"
+docker save -o ./tmp/channelchime.tar "${IMAGE_NAME}:${IMAGE_TAG}"
 
 echo "Deploying new bot commands if needed :"
 node utils/deploy-commands.js

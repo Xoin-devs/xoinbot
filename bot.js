@@ -5,6 +5,7 @@ require('module-alias/register');
 const loadCommandsAtStart = require("@utils/loadCommands");
 const voiceStateUpdate = require('@services/events/voice/voiceStateUpdate');
 const interactionCreate = require("@services/events/interaction/interactionCreate");
+const logger = require("@utils/logger");
 
 let today = new Date();
 
@@ -15,7 +16,7 @@ const client = new Client({
 let token = process.env.DISCORD_TOKEN;
 
 client.once(Events.ClientReady, (readyClient) => {
-    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+    logger(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
 client.commands = new Collection();

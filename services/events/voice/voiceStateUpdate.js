@@ -1,27 +1,20 @@
+require('module-alias/register');
+
 const { getChannelsByGuild } = require('@modules/database');
 const { getMembersCount } = require('@services/countMembers');
 const isStateChangeLegitimate = require('@utils/isStateChangeLegitimate');
+const logger = require('@utils/logger');
 
 module.exports = async (client, oldState, newState) => {
     const { member, channel } = newState;
     const newMembersCount = await getMembersCount(newState.channel);
-    const timeOptions = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-    };
 
     if (!isStateChangeLegitimate(oldState, newState)) {
-        console.log(`${new Date()} - State change is not legitimate.`);
+        logger(`State change is not legitimate.`);
         return;
     }
     if (newMembersCount > 1) {
-        console.log(
-            `${new Date()} - No need to announce : ${newMembersCount} members in the channel.`
-        );
+        logger(`No need to announce : ${newMembersCount} members in the channel.`);
         return;
     }
 
@@ -33,7 +26,7 @@ module.exports = async (client, oldState, newState) => {
         if (channel.id === vocalChannelId) {
             const userName = member.user.username;
             const textChannel = client.channels.cache.get(announcementChannelId);
-            console.log(`${new Date().toLocaleDateString(undefined, timeOptions)} - ${userName} has joined the voice channel`);
+            logger(`${userName} has joined the voice channel`);
             textChannel.send(`🪶 ${userName} has joined the voice channel.`);
         }
     }

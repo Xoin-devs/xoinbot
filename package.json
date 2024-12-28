@@ -2,14 +2,14 @@
   "name": "channel-chime",
   "version": "1.0.0",
   "description": "Channel Chime for your Discord server",
-  "main": "app.js",
+  "main": "bot.js",
   "type": "commonjs",
   "engines": {
     "node": "16.x"
   },
   "scripts": {
-    "start": "node app.js",
-    "register": "node commands.js",
+    "start": "node bot.js",
+    "register": "node ./utils/loadCommands.js",
     "dev": "nodemon bot.js"
   },
   "author": "Khwaja",
