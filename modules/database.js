@@ -4,7 +4,7 @@ require('module-alias/register');
 const logger = require('@utils/logger');
 
 // Initialisation de la base de données
-const db = new sqlite3.Database('./data.db', (err) => {
+const db = new sqlite3.Database('./database/data.db', (err) => {
     if (err) console.error(err.message);
     else logger('Connected to SQLite');
 });
