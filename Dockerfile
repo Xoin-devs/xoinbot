@@ -5,10 +5,11 @@
 # https://docs.docker.com/go/dockerfile-reference/
 
 
-FROM node:lts-alpine3.19
+FROM node:lts-alpine3.22
+LABEL org.opencontainers.image.source=https://github.com/Xoin-devs/xoinbot
 
 # Use production node environment by default.
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 
 WORKDIR /usr/src/app
@@ -32,4 +33,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the application.
-CMD node bot.js
+CMD ["node", "bot.js"]
