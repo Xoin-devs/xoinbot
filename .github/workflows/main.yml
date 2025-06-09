@@ -71,5 +71,5 @@ jobs:
         chmod 644 ~/.ssh/id_rsa.pub
         echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
-        ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'cd xoinbot && ./docker-run.sh ${{ env.IMAGE_NAME }}:${{ needs.build.outputs.TAG_NAME }}'
+        ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'cd xoinbot && ./docker-run.sh ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }}'
 
