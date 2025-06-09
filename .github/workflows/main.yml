@@ -19,13 +19,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Docker Login
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ secrets.GH_USER }}
-        password: ${{ secrets.GH_TOKEN }}
-
     - name: Debug Secret Presence
       run: |
         if [ -n "${{ secrets.GH_USER }}" ]; then
@@ -33,6 +26,13 @@ jobs:
         else
           echo "GH_USER secret is not set."
         fi
+
+    - name: Docker Login
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ secrets.GH_USER }}
+        password: ${{ secrets.GH_TOKEN }}
 
     - name: Determine Tag Name
       id: tagname
