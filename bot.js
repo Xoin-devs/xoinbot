@@ -59,9 +59,24 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
         const textChannel = client.channels.cache.get(textChannelId);
 
         console.log(`${today} - ${userName} is at the Xoin!`);
-        textChannel.send(`${userName} est au Xoin!`);
+        textChannel.send(`${userName} ${getXoinMessage()}`);
     }
 });
+
+function getXoinMessage() {
+  const dateTime = new Date();
+  const hours = dateTime.getHours();
+  const dayOfWeek = dateTime.getDay();
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    return " est au Xoin !";
+  } else if (hours > 8 && hours < 19) {
+    return " a posé sa journée !";
+  } else if (hours <= 8) {
+    return " ne va pas se lever demain parce qu'il est un gros chômeur !";
+  } else {
+    return " est au Xoin !";
+  }
+}
 
 // generic handling of text commands
 client.on(Events.InteractionCreate, async (interaction) => {
