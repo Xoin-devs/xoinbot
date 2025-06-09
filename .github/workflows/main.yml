@@ -31,7 +31,7 @@ jobs:
       run: echo "::set-output name=TAG_NAME::${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref }}" || echo "::set-output name=TAG_NAME::latest-SNAPSHOT"
 
     - name: Set Environment Variable
-      run: echo "TAG_NAME=${{ steps.tagname.outputs.TAG_NAME | split('/')[-1] }}" >> $GITHUB_ENV
+      run: echo "TAG_NAME=$(echo ${{ steps.tagname.outputs.TAG_NAME }} | awk -F'/' '{print $NF}')" >> $GITHUB_ENV
 
     - name: Build Docker image
       uses: docker/build-push-action@v2
