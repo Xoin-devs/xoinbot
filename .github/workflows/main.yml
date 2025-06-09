@@ -34,9 +34,9 @@ jobs:
       run: |
         if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" =~ refs/tags/ ]]; then
           TAG_NAME=$(echo "${{ github.ref }}" | awk -F'/' '{print $NF}')
-          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
         else
-          echo "TAG_NAME=latest-SNAPSHOT" >> $GITHUB_ENV
+          echo "TAG_NAME=latest-SNAPSHOT" >> $GITHUB_OUTPUT
         fi
 
     - name: Build Docker image
@@ -45,7 +45,7 @@ jobs:
         context: .
         file: Dockerfile
         push: true
-        tags: ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }}
+        tags: ${{ env.IMAGE_NAME }}:${{ steps.tagname.outputs.TAG_NAME }}
         no-cache: true
 
   deploy:
