@@ -31,6 +31,12 @@ node bot.js
 
 ## Docker
 
+### Validate my build
+
+You can test if your build is working by publishing a snapshot in your pull request using the label `build`
+
+> If you want to re-build, you will have to remove and re-put the label
+
 ### Deploy on prod
 
 Make sure Docker is running on the local environment.
@@ -45,19 +51,9 @@ docker login ghcr.io -u <GhUser> -p <PAT>
 
 > If you don't know how to generate a PAT see informations [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
-Build the docker image and export it as a tar :
+To deploy the new version, you just have to create a new tag and it will be automatically deployed.
 
-```shell
-./deploy-on-prod.sh -n ghcr.io/xoin-devs/xoinbot/<image_name> -t <image_tag>
-```
-
-Then open an ssh connection on the server hosting the bot and go into `~/xoinbot`:
-You should have the last version of `xoinbot.tar`
-Finally run :
-
-```shell
-./docker-run.sh
-```
+> You can also deploy from a pull request to test your image using the label `force deploy`
 
 And you have the last version of the Xoinbot runnig.
 
