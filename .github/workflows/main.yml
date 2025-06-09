@@ -13,6 +13,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      TAG_NAME: ${{ steps.tagname.outputs.TAG_NAME }}
 
     steps:
     - name: Checkout code
@@ -44,10 +46,6 @@ jobs:
           echo "TAG_NAME=latest-SNAPSHOT" >> $GITHUB_OUTPUT
         fi
 
-    - name: Set build job output
-      run: echo "TAG_NAME=${{ steps.tagname.outputs.TAG_NAME }}" >> $GITHUB_ENV
-      shell: bash
-
     # - name: Build Docker image
     #   uses: docker/build-push-action@v6
     #   with:
@@ -71,5 +69,5 @@ jobs:
         chmod 644 ~/.ssh/id_rsa.pub
         echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
-        ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'cd xoinbot && ./docker-run.sh ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }}'
+        ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} 'cd xoinbot && ./docker-run.sh ${{ env.IMAGE_NAME }}:${{ needs.build.outputs.TAG_NAME }}'
 
