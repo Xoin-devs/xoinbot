@@ -63,3 +63,22 @@ export function getRandomEmoji() {
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export function getXoinMessage() {
+  const dateTime = new Date();
+  const hours = dateTime.getHours();
+  const dayOfWeek = dateTime.getDay();
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    // If it's a weekend, return a different message
+    return " est au Xoin !";
+  } else if (hours > 8 && hours < 19) {
+    // If it's before noon, return a morning message
+    return " a posé sa journée !";
+  } else if (hours <= 8) {
+    // If it's before evening, return an afternoon message
+    return " ne va pas se lever demain parce qu'il est un gros chômeur !";
+  } else {
+    // If it's evening or later, return an evening message
+    return " est au Xoin !";
+  }
+}

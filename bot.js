@@ -5,6 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
+const { getXoinMessage } = require("./utils/discord-utils");
 
 let today = new Date();
 
@@ -59,7 +60,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
         const textChannel = client.channels.cache.get(textChannelId);
 
         console.log(`${today} - ${userName} is at the Xoin!`);
-        textChannel.send(`${userName} est au Xoin!`);
+        textChannel.send(`${userName} ${getXoinMessage()}`);
     }
 });
 
