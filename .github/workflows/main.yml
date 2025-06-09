@@ -37,6 +37,7 @@ jobs:
           echo "TAG_NAME=${{ github.ref }}" | awk -F'/' '{print $NF}' >> $GITHUB_ENV
         else
           echo "TAG_NAME=latest-SNAPSHOT" >> $GITHUB_ENV
+        fi
 
     - name: Set Environment Variable
       run: echo "TAG_NAME=${{ env.TAG_NAME }}"
