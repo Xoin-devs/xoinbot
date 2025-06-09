@@ -33,7 +33,8 @@ jobs:
       id: tagname
       run: |
         if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" =~ refs/tags/ ]]; then
-          echo "TAG_NAME=$(echo ${{ github.ref }} | awk -F'/' '{print $NF}')" >> $GITHUB_ENV
+          TAG_NAME=$(echo "${{ github.ref }}" | awk -F'/' '{print $NF}')
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
         else
           echo "TAG_NAME=latest-SNAPSHOT" >> $GITHUB_ENV
         fi
