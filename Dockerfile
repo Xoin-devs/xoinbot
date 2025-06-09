@@ -1,5 +1,5 @@
 # Add a build stage to install Python, make, and g++ only during the build process.
-FROM node:18-alpine3.22 AS build
+FROM node:22-alpine AS build
 
 WORKDIR /usr/src/app
 
@@ -13,7 +13,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     npm ci --omit=dev
 
 # Create the final image without Python, make, and g++.
-FROM node:18-alpine3.22
+FROM node:22-alpine
 LABEL org.opencontainers.image.source=https://github.com/Xoin-devs/xoinbot
 
 ENV NODE_ENV=production
