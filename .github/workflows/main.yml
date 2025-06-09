@@ -2,10 +2,8 @@ name: Docker Build and Deploy
 
 on:
   push:
-    branches:
-      - '*'
-    tags:
-      - '*'
+    branches: [ '**' ]
+    tags: [ '**' ]
   pull_request:
     types: [labeled]
 
