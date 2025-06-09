@@ -33,18 +33,22 @@ node bot.js
 
 ### Deploy on prod
 
-Be sure Docker is running on the local environment.
+Make sure Docker is running on the local environment.
+
+Make sure you are login with ghcr.io registries : 
+
+```shell
+docker login ghcr.io -u <GhUser> -p <PAT>
+```
+
+> Make sure the pat used is a **classic token**. Fine-grained tokens are not supported by Docker.
+
+> If you don't know how to generate a PAT see informations [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
 Build the docker image and export it as a tar :
 
 ```shell
-./deploy-on-prod.sh
-```
-
-The tar is located in `tmp/`. You can push it on the prod server using :
-
-```shell
-scp tmp/xoinbot.tar <USER>@<IP>:xoinbot
+./deploy-on-prod.sh -n ghcr.io/xoin-devs/xoinbot/<image_name> -t <image_tag>
 ```
 
 Then open an ssh connection on the server hosting the bot and go into `~/xoinbot`:
