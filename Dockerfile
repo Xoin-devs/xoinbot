@@ -4,7 +4,7 @@ FROM node:22-alpine AS build
 WORKDIR /usr/src/app
 
 # Install Python, make, and g++ for node-gyp dependencies.
-RUN apk add --no-cache python3 python3-dev make g++
+RUN apk add --no-cache python3 python3-dev py-pip py-setuptools make g++
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 RUN --mount=type=bind,source=package.json,target=package.json \
