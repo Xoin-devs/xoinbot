@@ -3,7 +3,7 @@ name: Docker Build and Deploy
 on:
   push:
     branches:
-      - master
+      - '*'
     tags:
       - '*'
   pull_request:
@@ -16,8 +16,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: |
-      github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && (
+      (github.event_name == 'push' && (startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/heads/master')))
+      || (github.event_name == 'pull_request' && (
         contains(github.event.pull_request.labels.*.name, 'build') ||
         contains(github.event.pull_request.labels.*.name, 'force deploy')
       ))
@@ -67,8 +67,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: |
-      github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'force deploy'))
+      (github.event_name == 'push' && (startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/heads/master')))
+      || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'force deploy'))
     steps:
     - name: Deploy to Production
       run: |
