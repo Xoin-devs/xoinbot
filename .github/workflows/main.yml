@@ -1,0 +1,53 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - feature/ops-tacleries
+    tags:
+      - '*'
+
+env:
+  IMAGE_NAME: ghcr.io/xoin-devs/xoinbot
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Docker Login
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ secrets.GH_USER }}
+        password: ${{ secrets.GH_TOKEN }}
+
+    - name: Determine Tag Name
+      id: tagname
+      run: echo "::set-output name=TAG_NAME::${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref }}" || echo "::set-output name=TAG_NAME::latest-SNAPSHOT"
+
+    - name: Set Environment Variable
+      run: echo "TAG_NAME=${{ steps.tagname.outputs.TAG_NAME##*/ }}" >> $GITHUB_ENV
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: ${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }}
+    
+
+  deploy:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: Deploy to Production
+      run: |
+        # Ajoutez ici vos commandes de déploiement en bash
+        echo "Déploiement de l'image Docker sur le serveur de production"
