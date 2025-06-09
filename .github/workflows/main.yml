@@ -1,5 +1,10 @@
 name: Docker Build and Deploy
 
+permissions:
+  contents: read
+  packages: write
+  pull-requests: read
+
 on:
   workflow_dispatch:
   push:
