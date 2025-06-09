@@ -1,27 +1,27 @@
-# syntax=docker/dockerfile:1
-
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-
-FROM node:lts-alpine3.22
-LABEL org.opencontainers.image.source=https://github.com/Xoin-devs/xoinbot
-
-# Use production node environment by default.
-ENV NODE_ENV=production
-
+# Add a build stage to install Python, make, and g++ only during the build process.
+FROM node:lts-alpine3.22 AS build
 
 WORKDIR /usr/src/app
 
+# Install Python, make, and g++ for node-gyp dependencies.
+RUN apk add --no-cache python3 make g++
+
 # Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev 
+    npm ci --omit=dev
+
+# Create the final image without Python, make, and g++.
+FROM node:lts-alpine3.22
+LABEL org.opencontainers.image.source=https://github.com/Xoin-devs/xoinbot
+
+ENV NODE_ENV=production
+
+WORKDIR /usr/src/app
+
+# Copy dependencies from the build stage.
+COPY --from=build /usr/src/app/node_modules ./node_modules
 
 # Run the application as a non-root user.
 USER node
@@ -32,5 +32,4 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 3000
 
-# Run the application.
 CMD ["node", "bot.js"]
