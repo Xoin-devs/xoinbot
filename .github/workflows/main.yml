@@ -21,8 +21,7 @@ jobs:
 
     - name: Build app
       run: |
-        npm ci --omit=dev
-        npm run build
+        npm install --production
 
     - name: Docker Login
       uses: docker/login-action@v2
