@@ -39,22 +39,26 @@ jobs:
           echo "TAG_NAME=latest-SNAPSHOT" >> $GITHUB_OUTPUT
         fi
 
-    - name: Build Docker image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: Dockerfile
-        push: true
-        tags: ${{ env.IMAGE_NAME }}:${{ steps.tagname.outputs.TAG_NAME }}
-        no-cache: true
+    # - name: Build Docker image
+    #   uses: docker/build-push-action@v6
+    #   with:
+    #     context: .
+    #     file: Dockerfile
+    #     push: true
+    #     tags: ${{ env.IMAGE_NAME }}:${{ steps.tagname.outputs.TAG_NAME }}
+    #     no-cache: true
 
   deploy:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/')
+    #if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
 
     steps:
     - name: Deploy to Production
       run: |
-        echo "Déploiement de l'image Docker sur le serveur de production"
+        echo "{{ secrets.ID_RSA }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        echo "{{ secrets.ID_RSA_PUB }}" > ~/.ssh/id_rsa.pub
+        chmod 644 ~/.ssh/id_rsa.pub
+        ssh {{ secrets.VPS_USER }}@{{ secrets.VPS_IP }} '~/xoinbot/docker-run.sh'
 
