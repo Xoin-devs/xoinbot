@@ -1,127 +1,209 @@
 const { Client, GatewayIntentBits, Events, Collection } = require("discord.js");
 const dotenv = require("dotenv");
-dotenv.config();
-const fs = require("node:fs");
-const path = require("node:path");
-const { toZonedTime } = require("date-fns-tz");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
 
-const PARIS_TIMEZONE = 'Europe/Paris';
-let today = toZonedTime(new Date(), PARIS_TIMEZONE);
+// Load environment variables
+dotenv.config();
 
+// Constants
+const ENVIRONMENT = {
+  TEST: {
+    TOKEN: process.env.TEST_DISCORD_TOKEN,
+    VOICE_CHANNEL_ID: process.env.TEST_VOICECHAT_CHANNEL,
+    TEXT_CHANNEL_ID: process.env.TEST_ANNOUNCEMENT_CHANNEL,
+  },
+  PRODUCTION: {
+    TOKEN: process.env.DISCORD_TOKEN,
+    VOICE_CHANNEL_ID: process.env.SNEK_VOICECHAT_CHANNEL,
+    TEXT_CHANNEL_ID: process.env.SNEK_ANNOUNCEMENT_CHANNEL,
+  },
+};
+
+const XOIN_MESSAGES = {
+  WEEKEND: " est au Xoin !",
+  WORK_HOURS: " a posé sa journée !",
+  EARLY_MORNING: " ne va pas se lever demain parce qu'il est un gros chômeur !",
+  EVENING: " est au Xoin !",
+};
+
+const BUTTON_RESPONSES = {
+  YES: "C'est une micro-agression, je suis bicurieux",
+  NO: "Non c'est pas raciste, c'est de l'humour",
+};
+
+const ERROR_MESSAGE = "There was an error while executing this command!";
+
+/**
+ * Initialize Discord client with required intents
+ */
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
 });
 
-let token = process.env.TEST_DISCORD_TOKEN;
-let voiceChannelId = process.env.TEST_VOICECHAT_CHANNEL;
-let textChannelId = process.env.TEST_ANNOUNCEMENT_CHANNEL;
+/**
+ * Determine environment configuration based on environment variable
+ */
+const config = process.env.IN_TEST_ENVIRONMENT 
+  ? ENVIRONMENT.TEST 
+  : ENVIRONMENT.PRODUCTION;
+
 if (!process.env.IN_TEST_ENVIRONMENT) {
-    console.log("Starting in production mode");
-    token = process.env.DISCORD_TOKEN;
-    voiceChannelId = process.env.SNEK_VOICECHAT_CHANNEL;
-    textChannelId = process.env.SNEK_ANNOUNCEMENT_CHANNEL;
+  console.log("Starting in production mode");
 }
-client.once(Events.ClientReady, (readyClient) => {
-    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
 
+/**
+ * Get member count for a voice channel
+ * @param {VoiceChannel} channel - The voice channel to check
+ * @returns {Promise<number>} The number of members in the channel
+ */
 async function getMembersCount(channel) {
-    if (channel === null) return 0;
-    const fetchedChannel = await channel.fetch(true);
-    return fetchedChannel.members.size;
+  if (channel === null) return 0;
+  const fetchedChannel = await channel.fetch(true);
+  return fetchedChannel.members.size;
 }
 
-client.commands = new Collection();
-loadCommandsAtStart(client);
-
-client.on("voiceStateUpdate", async (oldState, newState) => {
-    const { member, channel } = newState;
-
-    const oldMembersCount = await getMembersCount(oldState.channel);
-    const newMembersCount = await getMembersCount(newState.channel);
-
-    if (!isStateChangeLegitimate(oldState, newState)) {
-        today = toZonedTime(new Date(), PARIS_TIMEZONE);
-        console.log(`${today} - State change is not legitimate.`);
-        return;
-    }
-    if (newMembersCount > 1) {
-        today = toZonedTime(new Date(), PARIS_TIMEZONE);
-        console.log(
-            `${today} - No need to announce : ${newMembersCount} members in the channel.`
-        );
-        return;
-    }
-
-    if (channel && channel.id === voiceChannelId) {
-        today = toZonedTime(new Date(), PARIS_TIMEZONE);
-        const userName = member.user.username;
-        const textChannel = client.channels.cache.get(textChannelId);
-
-        console.log(`${today} - ${userName} is at the Xoin!`);
-        textChannel.send(`${userName} ${getXoinMessage()}`);
-    }
-});
-
+/**
+ * Generate a context-aware message based on time of day and day of week
+ * @returns {string} The appropriate message string
+ */
 function getXoinMessage() {
   const dateTime = toZonedTime(new Date(), PARIS_TIMEZONE);
   const hours = dateTime.getHours();
   const dayOfWeek = dateTime.getDay();
+  
   if (dayOfWeek === 0 || dayOfWeek === 6) {
-    return " est au Xoin !";
+    return XOIN_MESSAGES.WEEKEND;
   } else if (hours > 8 && hours < 19) {
-    return " a posé sa journée !";
+    return XOIN_MESSAGES.WORK_HOURS;
   } else if (hours <= 8) {
-    return " ne va pas se lever demain parce qu'il est un gros chômeur !";
+    return XOIN_MESSAGES.EARLY_MORNING;
   } else {
-    return " est au Xoin !";
+    return XOIN_MESSAGES.EVENING;
   }
 }
 
-// generic handling of text commands
-client.on(Events.InteractionCreate, async (interaction) => {
+/**
+ * Log a message with timestamp
+ * @param {string} message - Message to log
+ */
+function logWithTimestamp(message) {
+  const timestamp = new Date();
+  console.log(`${timestamp} - ${message}`);
+}
+
+/**
+ * Handle voice state changes to announce when users join the watched channel
+ */
+function setupVoiceStateHandler() {
+  client.on("voiceStateUpdate", async (oldState, newState) => {
+    const { member, channel } = newState;
+    
+    const newMembersCount = await getMembersCount(newState.channel);
+
+    if (!isStateChangeLegitimate(oldState, newState)) {
+      logWithTimestamp("State change is not legitimate.");
+      return;
+    }
+    
+    if (newMembersCount > 1) {
+      logWithTimestamp(`No need to announce : ${newMembersCount} members in the channel.`);
+      return;
+    }
+
+    if (channel && channel.id === config.VOICE_CHANNEL_ID) {
+      const userName = member.user.username;
+      const textChannel = client.channels.cache.get(config.TEXT_CHANNEL_ID);
+
+      logWithTimestamp(`${userName} is at the Xoin!`);
+      textChannel.send(`${userName}${getXoinMessage()}`);
+    }
+  });
+}
+
+/**
+ * Handle interaction events (buttons and commands)
+ */
+function setupInteractionHandler() {
+  client.on(Events.InteractionCreate, async (interaction) => {
     if (interaction.isButton()) {
-        if (interaction.customId === "yes") {
-            await interaction.update({
-                content: "C'est une micro-agression, je suis bicurieux",
-                components: [],
-            });
-        } else if (interaction.customId === "no") {
-            await interaction.update({
-                content: "Non c'est pas raciste, c'est de l'humour",
-                components: [],
-            });
-        }
-        return;
-    } else if (!interaction.isChatInputCommand()) return;
+      await handleButtonInteraction(interaction);
+      return;
+    } 
+    
+    if (!interaction.isChatInputCommand()) return;
+    await handleCommandInteraction(interaction);
+  });
+}
 
-    const command = interaction.client.commands.get(interaction.commandName);
+/**
+ * Handle button click interactions
+ * @param {Interaction} interaction - The button interaction
+ */
+async function handleButtonInteraction(interaction) {
+  if (interaction.customId === "yes") {
+    await interaction.update({
+      content: BUTTON_RESPONSES.YES,
+      components: [],
+    });
+  } else if (interaction.customId === "no") {
+    await interaction.update({
+      content: BUTTON_RESPONSES.NO,
+      components: [],
+    });
+  }
+}
 
-    if (!command) {
-        console.error(
-            `No command matching ${interaction.commandName} was found.`
-        );
-        return;
+/**
+ * Handle command interactions
+ * @param {Interaction} interaction - The command interaction
+ */
+async function handleCommandInteraction(interaction) {
+  const command = interaction.client.commands.get(interaction.commandName);
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    
+    const replyOptions = {
+      content: ERROR_MESSAGE,
+      ephemeral: true,
+    };
+    
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp(replyOptions);
+    } else {
+      await interaction.reply(replyOptions);
     }
+  }
+}
 
-    try {
-        await command.execute(interaction);
-    } catch (error) {
-        console.error(error);
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({
-                content: "There was an error while executing this command!",
-                ephemeral: true,
-            });
-        } else {
-            await interaction.reply({
-                content: "There was an error while executing this command!",
-                ephemeral: true,
-            });
-        }
-    }
-});
+/**
+ * Initialize the bot
+ */
+function initializeBot() {
+  // Set up commands collection
+  client.commands = new Collection();
+  loadCommandsAtStart(client);
+  
+  // Register event handlers
+  setupVoiceStateHandler();
+  setupInteractionHandler();
+  
+  // Log when bot is ready
+  client.once(Events.ClientReady, (readyClient) => {
+    console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+  });
+  
+  // Login with token
+  client.login(config.TOKEN);
+}
 
-client.login(token);
+// Start the bot
+initializeBot();
