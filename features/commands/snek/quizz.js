@@ -188,7 +188,7 @@ async function handleButtonResponse(buttonInteraction, questionData) {
         if (error.code === 10062) {
             // Interaction expired, ignore or log
             console.warn('Button interaction expired or already responded to.');
-            console.log(error);
+            console.error(error);
 
         } else {
             console.error('Error updating button interaction:', error);
