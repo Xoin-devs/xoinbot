@@ -145,7 +145,8 @@ module.exports = {    data: new SlashCommandBuilder()
  * @param {ButtonInteraction} buttonInteraction - The button interaction
  * @param {Object} questionData - The current question data
  */
-async function handleButtonResponse(buttonInteraction, questionData) {    const userChoice = buttonInteraction.customId;
+async function handleButtonResponse(buttonInteraction, questionData) {
+    const userChoice = buttonInteraction.customId;
     const components = []; // We remove buttons after the response
     let responseContent = '';
     let emoji = null;    
@@ -177,16 +178,24 @@ async function handleButtonResponse(buttonInteraction, questionData) {    const 
         .setTimestamp();    
         
     // Update the interaction with the response and possibly a reaction    
-    await buttonInteraction.update({
-        content: responseContent,
-        embeds: [responseEmbed],
-        components: components
-    });
+    try {
+        await buttonInteraction.update({
+            content: responseContent,
+            embeds: [responseEmbed],
+            components: components
+        });
+    } catch (error) {
+        if (error.code === 10062) {
+            // Interaction expired, ignore or log
+            console.warn('Button interaction expired or already responded to.');
+        } else {
+            console.error('Error updating button interaction:', error);
+        }
+    }
 
     // Add a reaction if it's a trick question
     if (emoji && buttonInteraction.message) {
         try {
-            // Attempt to add a reaction to the message
             await buttonInteraction.message.react(emoji);
         } catch (error) {
             console.error('Error during adding reaction:', error);
