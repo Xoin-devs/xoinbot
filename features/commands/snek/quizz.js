@@ -176,23 +176,29 @@ async function handleButtonResponse(buttonInteraction, questionData) {
         )
         .setFooter({ text: UI_TEXT.QUIZ_FOOTER })
         .setTimestamp();    
-        
-    // Update the interaction with the response and possibly a reaction    
+    
+    // Acknowledge the interaction immediately
     try {
-        await buttonInteraction.update({
+        await buttonInteraction.deferUpdate();
+    } catch (error) {
+        if (error.code === 10062) {
+            console.warn('Button interaction expired or already responded to (deferUpdate).');
+            return;
+        } else {
+            console.error('Error deferring button interaction:', error);
+            return;
+        }
+    }
+
+    // Edit the message after acknowledging the interaction
+    try {
+        await buttonInteraction.message.edit({
             content: responseContent,
             embeds: [responseEmbed],
             components: components
         });
     } catch (error) {
-        if (error.code === 10062) {
-            // Interaction expired, ignore or log
-            console.warn('Button interaction expired or already responded to.');
-            console.error(error);
-
-        } else {
-            console.error('Error updating button interaction:', error);
-        }
+        console.error('Error editing message after button interaction:', error);
     }
 
     // Add a reaction if it's a trick question
