@@ -34,7 +34,9 @@ jobs:
     - name: register commands
       run: |
         echo "Deploying new bot commands if needed :"
-        node utils/deploy-commands.js
+        cd utils
+        node ./deploy-commands.js
+        cd ..
 
     - name: Docker Login
       uses: docker/login-action@v3

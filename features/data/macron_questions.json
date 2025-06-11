@@ -1,6 +1,229 @@
 [
     {
-        "question": "Espèce de gros pd",
-        "answer": true
+        "question": "Les blagues sur l'orientation sexuelle ne devraient pas être considérées comme des micro-agressions",
+        "answer": "yes"
+    },
+    {
+        "question": "Il n'existe que deux genres biologiques",
+        "answer": "yes"
+    },
+    {
+        "question": "Les hommes ne peuvent pas tomber enceints",
+        "answer": "yes"
+    },
+    {
+        "question": "On ne peut pas changer son sexe biologique",
+        "answer": "yes"
+    },
+    {
+        "question": "Le wokisme est une idéologie dangereuse",
+        "answer": "yes"
+    },
+    {
+        "question": "Les quotas ethniques et de genre sont une forme de discrimination inversée",
+        "answer": "yes"
+    },
+    {
+        "question": "L'immigration massive sans assimilation pose des problèmes d'intégration",
+        "answer": "yes"
+    },
+    {
+        "question": "La culture de l'annulation est une menace pour la liberté d'expression",
+        "answer": "yes"
+    },
+    {
+        "question": "Les pronoms non-binaires sont une invention récente sans fondement biologique",
+        "answer": "yes"
+    },
+    {
+        "question": "L'occident n'est pas systématiquement raciste comme le prétend la théorie critique de la race",
+        "answer": "yes"
+    },
+    {
+        "question": "Les statistiques ethniques peuvent être utiles pour comprendre les disparités sociales",
+        "answer": "yes"
+    },
+    {
+        "question": "Les traditions ont encore leur place dans une société moderne équilibrée",
+        "answer": "yes"
+    },
+    {
+        "question": "Le mérite individuel est plus important que l'identité de groupe",
+        "answer": "yes"
+    },
+    {
+        "question": "La famille traditionnelle reste un pilier fondamental de la société",
+        "answer": "yes"
+    },
+    {
+        "question": "Les différences biologiques entre hommes et femmes existent et influencent certains comportements",
+        "answer": "yes"
+    },
+    {
+        "question": "Le patriarcat n'est pas la source de tous les problèmes sociétaux modernes",
+        "answer": "yes"
+    },
+    {
+        "question": "Les politiques d'action positive peuvent être injustes pour certains individus",
+        "answer": "yes"
+    },
+    {
+        "question": "La liberté d'expression doit inclure les opinions impopulaires ou controversées",
+        "answer": "yes"
+    },
+    {
+        "question": "L'appropriation culturelle est souvent une appréciation culturelle bénéfique",
+        "answer": "yes"
+    },
+    {
+        "question": "Le capitalisme, malgré ses défauts, a sorti des millions de personnes de la pauvreté",
+        "answer": "yes"
+    },
+    {
+        "question": "Les cours sur la diversité et l'inclusion en entreprise sont souvent de l'endoctrinement",
+        "answer": "yes"
+    },
+    {
+        "question": "Les enfants ne devraient pas être exposés à des discussions sur la sexualité avant la puberté",
+        "answer": "yes"
+    },
+    {
+        "question": "Les femmes et les hommes font naturellement des choix de carrière différents",
+        "answer": "yes"
+    },
+    {
+        "question": "Le masculin neutre en français n'est pas une oppression linguistique",
+        "answer": "yes"
+    },
+    {
+        "question": "L'écriture inclusive dégrade la langue française",
+        "answer": "yes"
+    },
+    {
+        "question": "Le privilège blanc n'existe pas dans les sociétés méritocratiques",
+        "answer": "yes"
+    },
+    {
+        "question": "La religion a un rôle important à jouer dans la société moderne",
+        "answer": "yes"
+    },
+    {
+        "question": "Les hommes blancs hétérosexuels ne sont pas tous des oppresseurs",
+        "answer": "yes"
+    },
+    {
+        "question": "Certains mouvements féministes modernes vont trop loin",
+        "answer": "yes"
+    },
+    {
+        "question": "Le changement climatique est réel mais les solutions proposées sont souvent extrêmes",
+        "answer": "maybe"
+    },
+    {
+        "question": "Les compétitions sportives devraient être séparées selon le sexe biologique",
+        "answer": "yes"
+    },
+    {
+        "question": "La majorité des inégalités de revenus s'expliquent par des choix personnels, pas par la discrimination",
+        "answer": "yes"
+    },
+    {
+        "question": "Une forte présence policière réduit la criminalité",
+        "answer": "yes"
+    },
+    {
+        "question": "Le multiculturalisme sans valeurs communes affaiblit la cohésion nationale",
+        "answer": "yes"
+    },
+    {
+        "question": "Les médias ont un biais progressiste évident",
+        "answer": "yes"
+    },
+    {
+        "question": "L'État-providence excessif décourage l'initiative individuelle",
+        "answer": "yes"
+    },
+    {
+        "question": "La défense des frontières nationales n'est pas du nationalisme toxique",
+        "answer": "yes"
+    },
+    {
+        "question": "L'idée que le genre est purement une construction sociale est fausse",
+        "answer": "yes"
+    },
+    {
+        "question": "Les hommes aussi sont victimes de sexisme dans certains domaines",
+        "answer": "yes"
+    },
+    {
+        "question": "Les universités sont devenues trop politisées et ne favorisent plus la libre-pensée",
+        "answer": "yes"
+    },
+    {
+        "question": "L'histoire occidentale n'est pas qu'une suite d'oppressions et mérite d'être étudiée avec fierté",
+        "answer": "yes"
+    },
+    {
+        "question": "Les théories du genre sont souvent basées sur des idéologies plutôt que sur des faits scientifiques",
+        "answer": "yes"
+    },
+    {
+        "question": "La liberté d'expression inclut le droit de critiquer les religions",
+        "answer": "yes"
+    },
+    {
+        "question": "L'avortement est un droit fondamental des femmes",
+        "answer": "no",
+        "trick": true
+    },
+    {
+        "question": "La discrimination positive est nécessaire pour corriger des inégalités historiques",
+        "answer": "no",
+        "trick": true
+    },
+    {
+        "question": "Les violences policières sont un problème systémique",
+        "answer": "no",
+        "trick": true
+    },    {
+        "question": "L'égalité des résultats est aussi importante que l'égalité des chances",
+        "answer": "no",
+        "trick": true
+    },
+    {
+        "question": "L'islamisme politique est incompatible avec les valeurs républicaines",
+        "answer": "yes"
+    },
+    {
+        "question": "Le port du voile intégral dans l'espace public pose un problème de sécurité",
+        "answer": "yes"
+    },
+    {
+        "question": "La laïcité doit s'appliquer de façon égale à toutes les religions, y compris l'islam",
+        "answer": "yes"
+    },
+    {
+        "question": "L'assimilation culturelle est préférable au communautarisme religieux",
+        "answer": "yes"
+    },
+    {
+        "question": "Les accommodements religieux ne devraient pas primer sur les règles communes",
+        "answer": "yes"
+    },
+    {
+        "question": "La France doit protéger son identité culturelle face à l'immigration",
+        "answer": "yes"
+    },
+    {
+        "question": "Les lois sur la laïcité doivent être renforcées pour éviter les dérives communautaristes",
+        "answer": "yes"
+    },
+    {
+        "question": "La critique de l'islam n'est pas de l'islamophobie",
+        "answer": "yes"
+    },
+    {
+        "question": "Les valeurs républicaines doivent primer sur les coutumes religieuses",
+        "answer": "yes"
     }
 ]
