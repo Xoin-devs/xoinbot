@@ -103,40 +103,65 @@ module.exports = {    data: new SlashCommandBuilder()
             [BUTTON.TYPES.YES.ID, BUTTON.TYPES.MAYBE.ID, BUTTON.TYPES.NO.ID].includes(buttonInteraction.customId);
               
         // Send the message with buttons and get a reference to attach the collector
-        await interaction.reply({
+        const message = await interaction.reply({
             components: [row], // Add buttons to the interface
             content: `${UI_TEXT.QUESTION_PREFIX}\`${selectedQuestion.question}\``,
             fetchReply: true // Important to get the message reference for the collector
-        }).then(async message => {
-            try {                
-                // Create a collector that waits only for a button click
-                // Note: This only collects interactions with components (buttons),
-                // not normal text messages
-                const collector = message.createMessageComponentCollector({ 
-                    filter,
-                    time: RESPONSE_TIMEOUT_MS,
-                    max: 1 // Only one response expected
-                });                
-                
-                // When a button is clicked, this function is called
-                collector.on('collect', async buttonInteraction => {
+        });
+        
+        try {                
+            // Create a collector that waits only for a button click
+            // Note: This only collects interactions with components (buttons),
+            // not normal text messages
+            const collector = message.createMessageComponentCollector({ 
+                filter,
+                time: RESPONSE_TIMEOUT_MS,
+                max: 1 // Only one response expected
+            });                
+            
+            // When a button is clicked, this function is called
+            collector.on('collect', async buttonInteraction => {
+                try {
                     // Process the player's response (button click)
                     await handleButtonResponse(buttonInteraction, currentQuestionData);
-                });
+                } catch (error) {
+                    console.error('Error in button interaction handler:', error);
+                }
+            });
 
-                // If the time expires without a button click
-                collector.on('end', async collected => {
-                    if (collected.size === 0) {
+            // If the time expires without a button click
+            collector.on('end', async collected => {
+                if (collected.size === 0) {
+                    try {
                         await interaction.followUp({ 
                             content: UI_TEXT.TIMEOUT_MESSAGE,
                             ephemeral: true 
                         });
+                    } catch (error) {
+                        console.error('Error sending timeout message:', error);
                     }
-                });
-            } catch (error) {
-                console.error('Error while handling collector:', error);
-            }
-        });
+                }
+                
+                // Make sure to disable buttons on timeout to prevent interaction errors
+                try {
+                    if (message.editable) {
+                        const disabledRow = new ActionRowBuilder().addComponents(
+                            row.components.map(button => {
+                                const newButton = ButtonBuilder.from(button);
+                                newButton.setDisabled(true);
+                                return newButton;
+                            })
+                        );
+                        
+                        await message.edit({ components: [disabledRow] });
+                    }
+                } catch (error) {
+                    console.error('Error disabling buttons after timeout:', error);
+                }
+            });
+        } catch (error) {
+            console.error('Error while handling collector:', error);
+        }
     }
 };
 
@@ -146,6 +171,19 @@ module.exports = {    data: new SlashCommandBuilder()
  * @param {Object} questionData - The current question data
  */
 async function handleButtonResponse(buttonInteraction, questionData) {
+    // Acknowledge the interaction IMMEDIATELY before doing anything else
+    try {
+        await buttonInteraction.deferUpdate();
+    } catch (error) {
+        if (error.code === 10062) {
+            console.warn('Button interaction expired or already responded to (deferUpdate).');
+            return;
+        } else {
+            console.error('Error deferring button interaction:', error);
+            return;
+        }
+    }
+    
     const userChoice = buttonInteraction.customId;
     const components = []; // We remove buttons after the response
     let responseContent = '';
@@ -176,19 +214,6 @@ async function handleButtonResponse(buttonInteraction, questionData) {
         )
         .setFooter({ text: UI_TEXT.QUIZ_FOOTER })
         .setTimestamp();    
-    
-    // Acknowledge the interaction immediately
-    try {
-        await buttonInteraction.deferUpdate();
-    } catch (error) {
-        if (error.code === 10062) {
-            console.warn('Button interaction expired or already responded to (deferUpdate).');
-            return;
-        } else {
-            console.error('Error deferring button interaction:', error);
-            return;
-        }
-    }
 
     // Edit the message after acknowledging the interaction
     try {

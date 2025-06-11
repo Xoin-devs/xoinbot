@@ -78,19 +78,43 @@ function getXoinMessage() {
   }
 }
 
+// Add global error handlers to prevent bot crashes
+client.on('error', (error) => {
+    console.error('Discord client error:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 // generic handling of text commands
 client.on(Events.InteractionCreate, async (interaction) => {
     if (interaction.isButton()) {
-        if (interaction.customId === "yes") {
-            await interaction.update({
-                content: "C'est une micro-agression, je suis bicurieux",
-                components: [],
+        try {
+            // Use deferUpdate first to acknowledge the interaction quickly
+            await interaction.deferUpdate().catch(error => {
+                if (error.code === 10062) {
+                    console.warn('Button interaction expired or already responded to.');
+                } else {
+                    console.error('Error deferring button interaction:', error);
+                }
+                return;
             });
-        } else if (interaction.customId === "no") {
-            await interaction.update({
-                content: "Non c'est pas raciste, c'est de l'humour",
-                components: [],
-            });
+            
+            // Then edit the message
+            if (interaction.customId === "yes") {
+                await interaction.message.edit({
+                    content: "C'est une micro-agression, je suis bicurieux",
+                    components: [],
+                }).catch(error => console.error('Error editing message:', error));
+            } else if (interaction.customId === "no") {
+                await interaction.message.edit({
+                    content: "Non c'est pas raciste, c'est de l'humour",
+                    components: [],
+                }).catch(error => console.error('Error editing message:', error));
+            }
+        } catch (error) {
+            console.error('Error handling button interaction:', error);
         }
         return;
     } else if (!interaction.isChatInputCommand()) return;
