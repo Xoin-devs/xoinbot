@@ -3,10 +3,12 @@ const dotenv = require("dotenv");
 dotenv.config();
 const fs = require("node:fs");
 const path = require("node:path");
+const { zonedTimeToUtc, utcToZonedTime } = require("date-fns-tz");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
 
-let today = new Date();
+const PARIS_TIMEZONE = 'Europe/Paris';
+let today = utcToZonedTime(new Date(), PARIS_TIMEZONE);
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
@@ -41,12 +43,12 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     const newMembersCount = await getMembersCount(newState.channel);
 
     if (!isStateChangeLegitimate(oldState, newState)) {
-        today = new Date();
+        today = utcToZonedTime(new Date(), PARIS_TIMEZONE);
         console.log(`${today} - State change is not legitimate.`);
         return;
     }
     if (newMembersCount > 1) {
-        today = new Date();
+        today = utcToZonedTime(new Date(), PARIS_TIMEZONE);
         console.log(
             `${today} - No need to announce : ${newMembersCount} members in the channel.`
         );
@@ -54,7 +56,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     }
 
     if (channel && channel.id === voiceChannelId) {
-        today = new Date();
+        today = utcToZonedTime(new Date(), PARIS_TIMEZONE);
         const userName = member.user.username;
         const textChannel = client.channels.cache.get(textChannelId);
 
@@ -64,7 +66,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 });
 
 function getXoinMessage() {
-  const dateTime = new Date();
+  const dateTime = utcToZonedTime(new Date(), PARIS_TIMEZONE);
   const hours = dateTime.getHours();
   const dayOfWeek = dateTime.getDay();
   if (dayOfWeek === 0 || dayOfWeek === 6) {
