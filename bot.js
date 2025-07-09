@@ -1,4 +1,5 @@
 const { Client, GatewayIntentBits, Events, Collection } = require("discord.js");
+const { toZonedTime } = require("date-fns-tz");
 const dotenv = require("dotenv");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
@@ -19,6 +20,8 @@ const ENVIRONMENT = {
     TEXT_CHANNEL_ID: process.env.SNEK_ANNOUNCEMENT_CHANNEL,
   },
 };
+
+const PARIS_TIMEZONE = 'Europe/Paris';
 
 const XOIN_MESSAGES = {
   WEEKEND: " est au Xoin !",
