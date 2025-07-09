@@ -1,11 +1,16 @@
 const { Client, GatewayIntentBits, Events, Collection } = require("discord.js");
 const { toZonedTime } = require("date-fns-tz");
 const dotenv = require("dotenv");
+
+dotenv.config();
+const fs = require("node:fs");
+const path = require("node:path");
+const { toZonedTime } = require("date-fns-tz");
 const loadCommandsAtStart = require("./utils/load-commands-at-start");
 const isStateChangeLegitimate = require("./utils/is-state-change-legitimate");
 
-// Load environment variables
-dotenv.config();
+const PARIS_TIMEZONE = 'Europe/Paris';
+let today = toZonedTime(new Date(), PARIS_TIMEZONE);
 
 // Constants
 const ENVIRONMENT = {
@@ -105,21 +110,23 @@ function setupVoiceStateHandler() {
     const newMembersCount = await getMembersCount(newState.channel);
 
     if (!isStateChangeLegitimate(oldState, newState)) {
-      logWithTimestamp("State change is not legitimate.");
-      return;
+        today = toZonedTime(new Date(), PARIS_TIMEZONE);
+        logWithTimestamp("State change is not legitimate.");
+        return;
     }
     
     if (newMembersCount > 1) {
-      logWithTimestamp(`No need to announce : ${newMembersCount} members in the channel.`);
-      return;
+        today = toZonedTime(new Date(), PARIS_TIMEZONE);
+        logWithTimestamp(`No need to announce : ${newMembersCount} members in the channel.`);
+        return;
     }
 
-    if (channel && channel.id === config.VOICE_CHANNEL_ID) {
-      const userName = member.user.username;
-      const textChannel = client.channels.cache.get(config.TEXT_CHANNEL_ID);
-
-      logWithTimestamp(`${userName} is at the Xoin!`);
-      textChannel.send(`${userName}${getXoinMessage()}`);
+    if (channel && channel.id === voiceChannelId) {
+        today = toZonedTime(new Date(), PARIS_TIMEZONE);
+        const userName = member.user.username;
+        const textChannel = client.channels.cache.get(config.TEXT_CHANNEL_ID);
+        logWithTimestamp(`${userName} is at the Xoin!`);
+        textChannel.send(`${userName}${getXoinMessage()}`);
     }
   });
 }
@@ -154,6 +161,21 @@ async function handleButtonInteraction(interaction) {
       content: BUTTON_RESPONSES.NO,
       components: [],
     });
+  }
+}
+
+function getXoinMessage() {
+  const dateTime = toZonedTime(new Date(), PARIS_TIMEZONE);
+  const hours = dateTime.getHours();
+  const dayOfWeek = dateTime.getDay();
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    return " est au Xoin !";
+  } else if (hours > 8 && hours < 19) {
+    return " a posé sa journée !";
+  } else if (hours <= 8) {
+    return " ne va pas se lever demain parce qu'il est un gros chômeur !";
+  } else {
+    return " est au Xoin !";
   }
 }
 
