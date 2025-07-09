@@ -1,30 +1,30 @@
 {
-  "name": "getting-started",
+  "name": "xoinbot",
   "version": "1.0.0",
-  "description": "Discord example app",
-  "main": "app.js",
+  "description": "Xoinbot - Be sure you don't miss your friends",
+  "main": "bot.js",
   "type": "commonjs",
   "engines": {
     "node": "16.x"
   },
   "scripts": {
-    "start": "node app.js",
-    "register": "node commands.js",
-    "dev": "nodemon app.js"
+    "start": "node bot.js",
+    "register": "node utils/deploy-commands.js",
+    "dev": "nodemon bot.js"
   },
-  "author": "Shay DeWael",
+  "author": "Xoinbot Team",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.7",
+    "axios": "^1.8.2",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "discord-interactions": "^3.2.0",
     "discord.js": "^14.14.1",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
+    "express": "^5.0.0",
     "node-fetch": "^3.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^3.1.10"
   }
 }
