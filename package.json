@@ -1,6 +1,6 @@
 {
   "name": "xoinbot",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Xoinbot - Be sure you don't miss your friends",
   "main": "bot.js",
   "type": "commonjs",
