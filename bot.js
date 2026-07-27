@@ -26,10 +26,10 @@ const ENVIRONMENT = {
 };
 
 const XOIN_MESSAGES = {
-  WEEKEND: " est au Xoin !",
-  WORK_HOURS: " a posé sa journée !",
-  EARLY_MORNING: " ne va pas se lever demain parce qu'il est un gros chômeur !",
-  EVENING: " est au Xoin !",
+  WEEKEND: " se repose au Xoin !",
+  WORK_HOURS: " prend un repos bien mérité",
+  EARLY_MORNING: " attaque fort la journée !",
+  EVENING: " est de passage !",
 };
 
 const BUTTON_RESPONSES = {
